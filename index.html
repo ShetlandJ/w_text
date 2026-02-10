@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wes Streeting & Lord Mandelson — WhatsApp Messages</title>
+<meta name="description" content="WhatsApp messages between Wes Streeting and Lord Mandelson">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #EFEAE2;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* WhatsApp wallpaper pattern overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d6cfc4' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='10' r='1.2'/%3E%3Ccircle cx='40' cy='25' r='1'/%3E%3Ccircle cx='25' cy='45' r='1.1'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header */
+  .chat-header {
+    background: #008069;
+    color: #fff;
+    padding: 0;
+    flex-shrink: 0;
+    z-index: 10;
+    position: relative;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 12px;
+  }
+  .header-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .header-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .header-name {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .header-subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+    line-height: 1.3;
+  }
+
+  /* Messages area */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding: 6px 5%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Date pill */
+  .date-pill {
+    text-align: center;
+    margin: 14px 0 8px;
+  }
+  .date-pill span {
+    display: inline-block;
+    background: rgba(255,255,255,0.92);
+    color: #54656f;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+  }
+  .date-pill:first-child {
+    margin-top: 8px;
+  }
+
+  /* Message row */
+  .msg-row {
+    display: flex;
+    margin-bottom: 2px;
+  }
+  .msg-row.sent {
+    justify-content: flex-end;
+  }
+  .msg-row.received {
+    justify-content: flex-start;
+  }
+  .msg-row.spaced {
+    margin-top: 8px;
+  }
+
+  /* Bubble wrapper */
+  .msg-wrap {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+  }
+  .msg-row.sent .msg-wrap {
+    align-items: flex-end;
+  }
+  .msg-row.received .msg-wrap {
+    align-items: flex-start;
+  }
+
+  /* Bubble */
+  .bubble {
+    padding: 6px 8px 6px 9px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    position: relative;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.08);
+  }
+
+  /* Sent (Wes - green) */
+  .msg-row.sent .bubble {
+    background: #D9FDD3;
+    color: #111b21;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 3px;
+  }
+  .msg-row.sent.consecutive .bubble {
+    border-top-right-radius: 3px;
+  }
+  .msg-row.sent.tail .bubble {
+    border-bottom-right-radius: 3px;
+  }
+
+  /* Received (Mandelson - white) */
+  .msg-row.received .bubble {
+    background: #FFFFFF;
+    color: #111b21;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 3px;
+  }
+  .msg-row.received.consecutive .bubble {
+    border-top-left-radius: 3px;
+  }
+  .msg-row.received.tail .bubble {
+    border-bottom-left-radius: 3px;
+  }
+
+  /* Sender label inside received bubbles */
+  .sender-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #008069;
+    margin-bottom: 1px;
+  }
+
+  /* Timestamp inline at bottom-right of bubble */
+  .bubble-meta {
+    float: right;
+    margin: 4px 0 -4px 12px;
+    font-size: 11px;
+    color: #667781;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .bubble-clear {
+    clear: both;
+  }
+
+  /* Links inside bubbles */
+  .bubble a {
+    color: #027eb5;
+    word-break: break-all;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* System message (redacted, attachments, etc.) */
+  .system-msg {
+    text-align: center;
+    margin: 10px 0;
+  }
+  .system-msg span {
+    display: inline-block;
+    background: rgba(255,255,255,0.85);
+    color: #667781;
+    font-size: 12.5px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+    font-style: italic;
+  }
+
+  /* Scroll to bottom button */
+  .scroll-bottom {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  .scroll-bottom.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  .scroll-bottom svg {
+    width: 20px;
+    height: 20px;
+    fill: #667781;
+  }
+
+  /* Desktop: constrain width */
+  @media (min-width: 600px) {
+    body {
+      background: #d1d7db;
+    }
+    body::before {
+      display: none;
+    }
+    .chat-header {
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      border-radius: 0;
+    }
+    .chat-messages {
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      background: #EFEAE2;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d6cfc4' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='10' r='1.2'/%3E%3Ccircle cx='40' cy='25' r='1'/%3E%3Ccircle cx='25' cy='45' r='1.1'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .scroll-bottom {
+      right: calc(50% - 300px + 16px);
+    }
+    .msg-wrap {
+      max-width: 75%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="chat-header">
+  <div class="header-top">
+    <div class="header-avatar">WS</div>
+    <div class="header-info">
+      <div class="header-name">Wes Streeting & Lord Mandelson</div>
+      <div class="header-subtitle">WhatsApp messages &middot; Aug 2024 – Oct 2025</div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-messages" id="chat"></div>
+
+<div class="scroll-bottom" id="scrollBtn" onclick="document.getElementById('chat').scrollTo({top:document.getElementById('chat').scrollHeight,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><path d="M12 16.175l-5.3-5.3 1.075-1.075L12 14.025l4.225-4.225L17.3 10.875z"/></svg>
+</div>
+
+<script>
+var M = [
+  { d:"30 August 2024", s:"wes", t:"22:22", m:"Great pitch and lovely photos in the Times" },
+  { d:"30 August 2024", s:"pm", t:"22:23", m:"X" },
+
+  { d:"31 August 2024", s:"pm", t:"12:19", m:"https://www.thetimes.com/uk/education/article/peter-mandelson-interview-oxford-chancellor-state-schools-sbd0h6323" },
+  { d:"31 August 2024", s:"pm", t:"12:19", m:"Different headline" },
+  { d:"31 August 2024", s:"wes", t:"12:20", m:"Better reflection of what you said" },
+  { d:"31 August 2024", s:"pm", t:"12:21", m:"Yup" },
+  { d:"31 August 2024", s:"pm", t:"12:54", m:"https://www.thetimes.com/uk/education/article/peter-mandelson-interview-oxford-chancellor-state-schools-sbd0h6323" },
+
+  { d:"1 September 2024", s:"pm", t:"21:33", m:"Would you consider speaking at the Oxford Union again in their no confidence in the government debate on October 17 (for Labour supporting President) ?" },
+  { d:"1 September 2024", s:"wes", t:"21:34", m:"Same day as my CLP AGM I\u2019m afraid" },
+  { d:"1 September 2024", s:"pm", t:"21:34", m:"That is the priority\u2026.." },
+  { d:"1 September 2024", s:"wes", t:"21:35", m:"Yep!" },
+
+  { d:"24 September 2024", s:"pm", t:"08:07", m:"Judge Labour by results, not row on donations\n\nhttps://www.thetimes.com/article/902ff7e7-14bd-4d3c-8df8-d2b70e08c7ea?shareToken=f9442bf9044bcf0be0ecc9a6ff53257f" },
+
+  { d:"8 October 2024", s:"pm", t:"14:53", m:"Videos starting to publish, whole thing will be on YouTube later\n\nhttps://x.com/timesradio/status/1843622377776971931?s=48" },
+
+  { d:"2 December 2024", s:"pm", t:"13:39", m:"Hi. Can you share Chris W contact as I want to congratulate him" },
+  { d:"2 December 2024", s:"wes", t:"13:39", m:"\u200e", sys:"Contact card shared" },
+  { d:"2 December 2024", s:"pm", t:"13:39", m:"Ta" },
+
+  { d:"19 December 2024", s:"pm", t:"10:48", m:"Recovering nicely at home now [REDACTED] happy holidays to everyone x" },
+  { d:"19 December 2024", s:"wes", t:"10:48", m:"Are you ok? X" },
+  { d:"19 December 2024", s:"pm", t:"10:49", m:"Yes [REDACTED]" },
+
+  { d:"20 December 2024", s:"wes", t:"18:29", m:"Congratulations Ambassador! \uD83C\uDDEC\uD83C\uDDE7\uD83C\uDDFA\uD83C\uDDF8" },
+  { d:"20 December 2024", s:"pm", t:"19:03", m:"\uD83E\uDD17" },
+
+  { d:"27 December 2024", s:"pm", t:"15:37", m:"There is no touch of John Moore about you" },
+  { d:"27 December 2024", s:"wes", t:"15:54", m:"I had to google him!" },
+  { d:"27 December 2024", s:"wes", t:"16:01", m:"Not too bothered by it. It only confirms what I already know: delivery is the only thing that really matters and how I will now be judged." },
+  { d:"27 December 2024", s:"pm", t:"16:02", m:"Before Patrick\u2019s time too" },
+  { d:"27 December 2024", s:"wes", t:"16:12", m:"Indeed. Trying to work out which veteran has the wooden spoon out\u2026" },
+  { d:"27 December 2024", s:"pm", t:"16:23", m:"Could be anyone including the doorman" },
+
+  { d:"30 December 2024", s:"wes", t:"17:51", m:"\uD83D\uDCC4 A Note on MAGA Insights.pdf \u2022 2 pages", sys:"file" },
+  { d:"30 December 2024", s:"wes", t:"17:51", m:"Interesting readout on the US via Jim Murphy if you haven\u2019t already seen it." },
+
+  { d:"23 February 2025", s:"wes", t:"21:15", m:"I spoke to Roger who suggested you are very much enjoying your new DC life! \uD83C\uDDFA\uD83C\uDDF8" },
+  { d:"23 February 2025", s:"pm", t:"", m:"I am! It suits me..." },
+  { d:"23 February 2025", s:"pm", t:"", m:"By way we have a big problem coming down rack re pharma tariffs. Trump thinks US pharma not being treated well, wants to out tariffs on EU and UK and force manufacturing to US." },
+  { d:"23 February 2025", s:"wes", t:"", m:"Urgh." },
+  { d:"23 February 2025", s:"wes", t:"", m:"Yet RFK hates pharma." },
+
+  { d:"2 March 2025", s:"wes", t:"12:15", m:"Am free all day, so call whenever you like" },
+  { d:"2 March 2025", s:"pm", t:"12:16", m:"Great. Doing a morning show here and will call after" },
+
+  { d:"28 March 2025", s:"wes", t:"10:52", m:"You should get Doyle to do your comms in DC!" },
+  { d:"28 March 2025", s:"pm", t:"11:32", m:"All my comms have been shut down by No10.\n\nWhy was he pushed out ?" },
+  { d:"28 March 2025", s:"wes", t:"11:32", m:"God knows" },
+  { d:"28 March 2025", s:"pm", t:"11:33", m:"The government problems do not stem from comms" },
+  { d:"28 March 2025", s:"wes", t:"11:33", m:"Quite." },
+  { d:"28 March 2025", s:"wes", t:"11:36", m:"I fear we\u2019re in big trouble here \u2013 and I am toast at the next election. We just lost our safest ward in Redbridge (51% Muslim, Ilford S) to a Gaza independent. At this rate I don\u2019t think we\u2019ll hold either of the two Ilford seats." },
+  { d:"28 March 2025", s:"wes", t:"11:39", m:"There isn\u2019t a clear answer to the question: why Labour?" },
+  { d:"28 March 2025", s:"pm", t:"11:48", m:"The government doesn\u2019t have an economic philosophy which is then followed through in a programme of policies." },
+  { d:"28 March 2025", s:"wes", t:"11:49", m:"No growth strategy at all" },
+
+  { d:"16 June 2025", s:"wes", t:"10:55", m:"Morning! Are you free for a call anytime between 1400\u20111600 U.K. time as I\u2019ve got a call with Secretary Kennedy today and I thought it worth a chat beforehand. This has just been sprung on me by my PO with a poor quality departmental briefing." },
+  { d:"16 June 2025", s:"pm", t:"11:27", m:"I am in Barrow on nuclear subs visit and I am not sure if I will have phones. Let me work out." },
+  { d:"16 June 2025", s:"pm", t:"13:24", m:"James Roscoe will contact you" },
+
+  { d:"29 June 2025", s:"pm", t:"09:33", m:"Well done on BBC, very good x" },
+  { d:"29 June 2025", s:"pm", t:"19:58", m:"Are you planning visit to US this year ?" },
+  { d:"29 June 2025", s:"wes", t:"20:01", m:"Hope so! X" },
+  { d:"29 June 2025", s:"pm", t:"20:02", m:"Need to plan. Lots of tech companies and people to talk to." },
+
+  { d:"24 July 2025", s:"wes", t:"23:00", m:"Am sure this will come up in coming days, so wanted to check in with you on recognition of Palestine and the domestic politics of it.\n\nKeir\u2019s statement today was excellent, but Macron\u2019s statement tonight ups the ante.\n\nMorally and politically, I think we need to join France.\n\nMorally, because Israel is committing war crimes before our eyes. Their government talks the language of ethnic cleansing and I have met with our own medics out there who describe the most chilling and distressing scenes of calculated brutality against women and children.\n\nPolitically, a Commons vote will be engineered in September on recognition and we will lose it if we\u2019re not ahead of it. There are no circumstances in which people like me or Shabana could abstain or vote against, for example. Conference will be a sea of Palestinian flags and the moderates will be waving them.\n\nWe need to be leading the charge on this. The alternative is being dragged there with enormous damage to Keir, the govt and the party.\n\nI\u2019ve never been a shrinking violent on Israel. I\u2019ve supported LFI for over 20 years. Our sister party, Haaretz, and progressives are clear about what\u2019s being done in their name and they oppose it.\n\nI appreciate these things are always more complicated than they appear to those of us who aren\u2019t up close as you are and I also appreciate how much Keir and David are giving to this personally.\n\nBut it is what it is. We need to lead, not follow." },
+  { d:"24 July 2025", s:"pm", t:"23:11", m:"I can see all this but I am worried that such a gesture now could blow a 2 SS out of the water if Israel decided that unilateral recognition justified further WB annexation which the US would be powerless to stop or reverse. That would be the end of it. So I think we need to employ practical means to get a 2SS, not quickly I grant but realistically. The PA with reform and new leadership can advance this with Arab/US/European support. The alternative is a further deadlocked death spiral on an even greater scale than now." },
+  { d:"24 July 2025", s:"wes", t:"23:12", m:"Israel is doing it anyway" },
+  { d:"24 July 2025", s:"wes", t:"23:12", m:"This is rogue state behaviour. Let them pay the price as pariahs with sanctions applied to the state, not just a few ministers." },
+  { d:"24 July 2025", s:"pm", t:"23:24", m:"Well, I don\u2019t make government policy I only help implement it so my views are between us." },
+  { d:"24 July 2025", s:"wes", t:"23:39", m:"Absolutely. Not shooting the messenger. It\u2019s v helpful in trying to understand what Keir is weighing up as he balances all the risks and considerations that aren\u2019t necessarily obvious to the rest of us \u2013 so thank you!" },
+
+  { d:"26 July 2025", s:"pm", t:"13:06", m:"How are you feeling now ?" },
+  { d:"26 July 2025", s:"wes", t:"13:32", m:"Extremely concerned. Keir\u2019s statement has been received as boxing himself in. We are headed straight into:\n\n\u2022 summer of angst\n\u2022 SO24 debate and engineered vote on recognition in September\n\u2022 if whipped, resignations at every level\n\u2022 conference dominated by this\n\nThe discontent isn\u2019t just from the left of the PLP. It is from moderates.\n\nWill be on a bigger scale than welfare and could prove fatal." },
+  { d:"26 July 2025", s:"pm", t:"13:55", m:"If those events unfolded it would certainly convince the public that we are unfit for government.\n\nWhat does the PLP think would follow from announcing recognition?" },
+  { d:"26 July 2025", s:"wes", t:"13:56", m:"Nothing in practice, but the symbolism matters against the backdrop of what we\u2019re seeing." },
+  { d:"26 July 2025", s:"pm", t:"14:16", m:"Got it" },
+
+  { d:"3 September 2025", s:"wes", t:"22:52", m:"I\u2019d really like to meet Pete Buttigieg when he\u2019s in London for Global Progress. Do you think you could put us in touch?" },
+  { d:"3 September 2025", s:"pm", t:"22:56", m:"I am sure. I will get office to reach him." },
+
+  { d:"11 September 2025", s:"pm", t:"18:26", m:"LETTER TO BRITISH EMBASSY WASHINGTON STAFF FROM LORD MANDELSON\n\n11 September 2025\n\nDear All,\n\nAs you will be have seen, my position as Ambassador to the United States has come to an end.\n\nBeing Ambassador here has been the privilege of my life, and Reinaldo\u2019s. I could not have wished for a better welcome by you all, a better introduction to the job or better support while here. Your professionalism has been superb, more so than I have experienced in any public role. For this I thank you from the bottom of my heart.\n\nThe circumstances surrounding the announcement today are ones which I deeply regret. I continue to feel utterly awful about my association with Epstein twenty years ago and the plight of his victims. I have no alternative to accepting the Prime Minister\u2019s decision and will leave a position in which I have been so incredibly honoured to serve.\n\nThe relationship between Britain and the United States of America is a unique one. I know that you will continue to serve and deepen that relationship from DC right across our brilliant network.\n\nI wish to thank you for all of your efforts in serving me as your Ambassador. In a short time we have achieved so much. We leave the relationship with the US in a really good condition, with a magnificent State Visit and the new US\u2011UK Technology Partnership \u2013 my personal pride and joy that will help write the next chapter of the special relationship \u2013 set for next week.\n\nThank you from me, Reinaldo and Jock. I will treasure the experience and memory of having worked with you all.\n\nVery best\n\nPeter\n\nLord Mandelson" },
+
+  { d:"30 October 2025", s:"pm", t:"18:21", m:"Shared with you by a Times subscriber.\n\nWho is Rob Jetten? The liberal vying to be the youngest Dutch PM\n\nhttps://www.thetimes.com/article/30447959-e222-4ae6-b609-b512c10cba06?shareToken=37b0b2813a20c3aa18859156e2ae7f0e" }
+];
+
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function fmt(text) {
+  var h = esc(text);
+  h = h.replace(/\n/g, '<br>');
+  // Linkify URLs
+  h = h.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  return h;
+}
+
+var chat = document.getElementById('chat');
+var lastDate = '', lastSender = '';
+
+for (var i = 0; i < M.length; i++) {
+  var msg = M[i];
+
+  // Date pill
+  if (msg.d !== lastDate) {
+    var pill = document.createElement('div');
+    pill.className = 'date-pill';
+    pill.innerHTML = '<span>' + esc(msg.d) + '</span>';
+    chat.appendChild(pill);
+    lastDate = msg.d;
+    lastSender = '';
+  }
+
+  // System message (contact shared, etc.)
+  if (msg.sys === 'Contact card shared') {
+    var sm = document.createElement('div');
+    sm.className = 'system-msg';
+    sm.innerHTML = '<span>\uD83D\uDCCE Contact card shared</span>';
+    chat.appendChild(sm);
+    lastSender = '';
+    continue;
+  }
+
+  var next = M[i + 1];
+  var isSent = msg.s === 'wes';
+  var isConsec = (msg.s === lastSender);
+  var isTail = !next || next.s !== msg.s || next.d !== msg.d;
+  var showSender = !isConsec && !isSent;
+
+  var row = document.createElement('div');
+  var cls = 'msg-row' + (isSent ? ' sent' : ' received');
+  if (isConsec) cls += ' consecutive';
+  if (isTail) cls += ' tail';
+  if (!isConsec && lastSender !== '') cls += ' spaced';
+  row.className = cls;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'msg-wrap';
+
+  var bubble = document.createElement('div');
+  bubble.className = 'bubble';
+
+  var inner = '';
+
+  // Sender label for first message in a group from Mandelson
+  if (showSender) {
+    inner += '<div class="sender-label">Lord Mandelson</div>';
+  }
+
+  // Timestamp meta floated right
+  if (msg.t) {
+    inner += '<span class="bubble-meta">' + esc(msg.t) + '</span>';
+  }
+
+  inner += fmt(msg.m);
+  inner += '<span class="bubble-clear"></span>';
+
+  bubble.innerHTML = inner;
+  wrap.appendChild(bubble);
+  row.appendChild(wrap);
+  chat.appendChild(row);
+  lastSender = msg.s;
+}
+
+// Scroll to top
+chat.scrollTop = 0;
+
+// Scroll-to-bottom button logic
+var scrollBtn = document.getElementById('scrollBtn');
+chat.addEventListener('scroll', function() {
+  var fromBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight;
+  if (fromBottom > 400) {
+    scrollBtn.classList.add('visible');
+  } else {
+    scrollBtn.classList.remove('visible');
+  }
+});
+</script>
+
+</body>
+</html>

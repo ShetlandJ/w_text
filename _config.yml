@@ -1,2 +1,4 @@
 title: Wes Streeting & Lord Mandelson - Messages
-theme: minima
+exclude:
+  - README.md
+  - messages.md
