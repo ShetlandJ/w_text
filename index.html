@@ -582,7 +582,11 @@ for (var i = 0; i < M.length; i++) {
 
   var inner = '';
 
-  // No sender label in 1-on-1 chat
+  // Show sender label only on the very first received message
+  if (showSender && !window._shownSender) {
+    inner += '<div class="sender-label">Lord Mandelson</div>';
+    window._shownSender = true;
+  }
 
   // Timestamp meta floated right (with blue ticks for sent)
   if (msg.t || isSent) {
