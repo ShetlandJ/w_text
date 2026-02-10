@@ -265,8 +265,12 @@
   }
   .read-receipt svg {
     width: 16px;
-    height: 11px;
-    fill: #53bdeb;
+    height: 15px;
+    fill: none;
+    stroke: #53bdeb;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   /* Links inside bubbles */
@@ -592,7 +596,7 @@ for (var i = 0; i < M.length; i++) {
   if (msg.t || isSent) {
     inner += '<span class="bubble-meta">';
     if (msg.t) inner += esc(msg.t);
-    if (isSent) inner += '<span class="read-receipt"><svg viewBox="0 0 16 11"><path d="M11.07.66L5.53 6.2 3.72 4.39l-.89.89 2.7 2.7 6.43-6.43zM.41 7.98l2.7 2.7.89-.89-2.7-2.7zm10.66-7.32l-.89.89 3.54 3.54.89-.89z"/></svg></span>';
+    if (isSent) inner += '<span class="read-receipt"><svg viewBox="0 0 16 15"><polyline points="1.5 7.5 5 11 11 3"/><polyline points="5 7.5 8.5 11 14.5 3"/></svg></span>';
     inner += '</span>';
   }
 
